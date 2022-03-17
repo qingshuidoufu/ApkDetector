@@ -101,24 +101,25 @@ def do_change_password(request):
             return HttpResponse(json.dumps({'msg':'修改成功'}),content_type='application/json')
 
 
-def send_email(request):
-    """
-    发送邮件
-    :param request:
-    :return:
-    """
-    send_mail(subject='发送邮件的标题',
-              message='发送邮件的内容',
-              from_email='trashcodetest@163.com',  #发送者邮箱
-              recipient_list=['792649900@qq.com'], # 接收者邮箱可以写多个
-              fail_silently=False)
-    return HttpResponse('邮件发送成功')
+# def send_email(request):
+#     """
+#     发送邮件
+#     :param request:
+#     :return:
+#     """
+#     send_mail(subject='发送邮件的标题',
+#               message='发送邮件的内容',
+#               from_email='trashcodetest@163.com',  #发送者邮箱
+#               recipient_list=['792649900@qq.com'], # 接收者邮箱可以写多个
+#               fail_silently=False)
+#     return HttpResponse('邮件发送成功')
 
 
 @login_required
 def profile(request):
     user = request.user
     return render(request, 'profile.html', {'user': user})
+
 
 
 @login_required
@@ -145,3 +146,4 @@ def profile_update(request):
         form = ProfileForm(default_data)
 
     return render(request, 'profile_update.html', {'form': form, 'user': user})
+
