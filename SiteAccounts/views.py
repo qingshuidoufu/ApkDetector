@@ -1,7 +1,8 @@
 import json
 
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -11,6 +12,12 @@ from django.template import RequestContext
 # Create your views here.
 
 # 登录页面
+from django.urls import reverse
+
+from SiteAccounts.forms import ProfileForm
+from SiteAccounts.models import UserProfile
+
+
 def my_login(request):
     return render(request, 'index.html')
 
@@ -92,3 +99,49 @@ def do_change_password(request):
             user.set_password(new_password)  # 重置密码
             user.save()  #  一定要保存才会生效
             return HttpResponse(json.dumps({'msg':'修改成功'}),content_type='application/json')
+
+
+def send_email(request):
+    """
+    发送邮件
+    :param request:
+    :return:
+    """
+    send_mail(subject='发送邮件的标题',
+              message='发送邮件的内容',
+              from_email='trashcodetest@163.com',  #发送者邮箱
+              recipient_list=['792649900@qq.com'], # 接收者邮箱可以写多个
+              fail_silently=False)
+    return HttpResponse('邮件发送成功')
+
+
+@login_required
+def profile(request):
+    user = request.user
+    return render(request, 'profile.html', {'user': user})
+
+
+@login_required
+def profile_update(request):
+    user = request.user
+    user_profile = get_object_or_404(UserProfile, user=user)
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST)
+
+        if form.is_valid():
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.save()
+
+            user_profile.org = form.cleaned_data['org']
+            user_profile.telephone = form.cleaned_data['telephone']
+            user_profile.save()
+
+            return HttpResponseRedirect('../')
+    else:
+        default_data = {'first_name': user.first_name, 'last_name': user.last_name,
+                        'org': user_profile.org, 'telephone': user_profile.telephone, }
+        form = ProfileForm(default_data)
+
+    return render(request, 'profile_update.html', {'form': form, 'user': user})

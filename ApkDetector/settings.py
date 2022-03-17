@@ -135,4 +135,29 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/accounts/login/'
 
+# 基本设定
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+LOGIN_REDIRECT_URL = '/accounts/profile/'
+
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
+#发送邮件的邮箱
+EMAIL_HOST_USER = 'trashcodetest@163.com'
+#在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = 'JCCMSUHUEMGGRJVU'
+DEFAULT_FROM_EMAIL = 'trashcodetest@163.com'
+#收件人看到的发件人
+EMAIL_FROM = '邮箱<trashcodetest@163.com>'
+
+ACCOUNT_SIGNUP_FORM_CLASS = 'SiteAccounts.forms.SignupForm'
+
+
 
