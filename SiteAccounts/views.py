@@ -39,6 +39,9 @@ def do_regist(request):
         if same_name_user:
             return HttpResponse(json.dumps({'msg':'用户名已存在, 请重新选择用户名!'}),content_type='application/json')
         new_user = User.objects.create_user(username=username,password=password)
+        user_profile = UserProfile()
+        user_profile.user = new_user
+        user_profile.save()
 
         if new_user is not None:
             return HttpResponse(json.dumps({'msg':'注册成功'}),content_type='application/json')
