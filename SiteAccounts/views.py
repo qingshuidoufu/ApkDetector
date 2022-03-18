@@ -124,9 +124,21 @@ def profile(request):
     return render(request, 'profile.html', {'user': user})
 
 
-
+# 更新个人信息
 @login_required
 def profile_update(request):
+    user = request.user
+    user_profile = get_object_or_404(UserProfile, user=user)
+
+    default_data = {'first_name': user.first_name, 'last_name': user.last_name,
+                    'org': user_profile.org, 'telephone': user_profile.telephone, }
+    form = ProfileForm(default_data)
+
+    return render(request, 'profile_update.html', {'form': form, 'user': user})
+
+# 更新个人信息按钮
+@login_required
+def do_profile_update(request):
     user = request.user
     user_profile = get_object_or_404(UserProfile, user=user)
 
@@ -143,10 +155,3 @@ def profile_update(request):
             user_profile.save()
 
             return HttpResponseRedirect('../')
-    else:
-        default_data = {'first_name': user.first_name, 'last_name': user.last_name,
-                        'org': user_profile.org, 'telephone': user_profile.telephone, }
-        form = ProfileForm(default_data)
-
-    return render(request, 'profile_update.html', {'form': form, 'user': user})
-

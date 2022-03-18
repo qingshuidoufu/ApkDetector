@@ -15,6 +15,7 @@ urlpatterns = [
     # path('send_email/',views.send_email),
     path('',include('allauth.urls')),
     re_path(r'^profile/$', views.profile, name='profile'),
-    re_path(r'^profile/update/$', views.profile_update, name='profile_update')
+    re_path(r'^profile/update/$', views.profile_update, name='profile_update'),
+    re_path(r'^profile/do_update/$', views.do_profile_update)
     ,
 ]
