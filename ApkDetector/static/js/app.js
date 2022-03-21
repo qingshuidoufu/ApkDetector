@@ -16,7 +16,7 @@ angular.module('DroidWatcher',['ui.router','Controllers'])
                 controller:'apkSearchCtrl'
             })
             .state('apk_upload',{
-                url:'/apk/upload',
+                url:'/apk/upload/',
                 templateUrl:'/static/html/apk/upload.html',
                 controller:'apkUploadCtrl'
             })

@@ -31,7 +31,7 @@
             <div class="col-lg-6 bg-white">
               <div class="form d-flex align-items-center">
                 <div class="content">
-                  <form method="post" action="../login_auth/" class="form-validate" id="loginFrom">
+                  <form method="post" action="./login_auth" class="form-validate" id="loginFrom">
                       {% csrf_token %}
                       <div class="form-group">
                       <input id="login-username" type="text" name="userName" required data-msg="请输入用户名" placeholder="用户名" value="admin" class="input-material">
@@ -57,7 +57,7 @@
                     </div>
                   </form>
                   <br />
-                  <small>没有账号?</small><a href="../register" class="signup">&nbsp;注册</a>
+                  <small>没有账号?</small><a href="./register" class="signup">&nbsp;注册</a>
                 </div>
               </div>
             </div>

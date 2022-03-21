@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.baidu',
+    'apk'
+    ,
 ]
 SITE_ID = 1
 
@@ -50,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -159,6 +161,6 @@ DEFAULT_FROM_EMAIL = 'trashcodetest@163.com'
 EMAIL_FROM = '邮箱<trashcodetest@163.com>'
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'SiteAccounts.forms.SignupForm'
-
+APPEND_SLASH=False
 
 

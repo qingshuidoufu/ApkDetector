@@ -254,7 +254,7 @@ angular.module('Controllers',['angularFileUpload'])
             if($scope.files.length<=0) return;
             var file=$scope.files[0];
             $scope.xhr=$upload.upload({
-                url:'/apk/upload',
+                url:'/apk/upload/',
                 file:file
                 //fields:{'apkType':$scope.apkType}
             }).progress(function(evt){
