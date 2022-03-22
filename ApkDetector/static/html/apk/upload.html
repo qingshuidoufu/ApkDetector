@@ -11,39 +11,18 @@
     <div class="btn btn-primary col-sm-2 col-sm-offset-2"
          style="text-align: center" >
         <i class="glyphicon glyphicon-upload"></i>
-        <input style= "background-color:transparent;border:0;" type="button" onclick="sendToUser()" id="sendToUser" value="提交" />
+        <input style= "background-color:transparent;border:0;" type="button" onclick="upload()" id="upload" value="提交" />
     </div>
 
 
-
-    <div class="btn btn-primary col-sm-2 col-sm-offset-2"
-         style="text-align: center" ng-click="start()">
-        <i class="glyphicon glyphicon-upload"></i>
-        <span>开始上传</span>
-    </div>
 
 
     <div class="btn btn-warning col-sm-2 col-sm-offset-2"
-         style="text-align: center" ng-click="cancel()">
-        <i class="glyphicon glyphicon-ban-circle"></i>
-        <span>取消上传</span>
+         style="text-align: center" >
+        <i class="glyphicon glyphicon-flag"></i>
+        <input style= "background-color:transparent;border:0;" type="button" onclick="startScan()" id="startScan" value="开始扫描" />
     </div>
-    <div class="col-sm-2 col-sm-offset-3">
-        <select style="height: 30px" ng-model="apkType" class="form-control">
-            <option value=3 >请选择样本类型</option>
-            <option value=0>训练样本</option>
-            <option value=1>测试样本</option>
-        </select>
-    </div>
-    <div class="col-sm-2 col-sm-offset-2">
-        <select style="height: 30px" ng-model="level" class="form-control">
-            <option value=4 >请选择风险等级</option>
-            <option value=0>正常</option>
-            <option value=1>恶意</option>
-            <option value=2>中危</option>
-            <option value=3>高危</option>
-        </select>
-    </div>
+
 
 </div>
 <br>
@@ -57,7 +36,14 @@
     </div>
 </div>
 <script>
-        function sendToUser(){ //在这里进行ajax 文件上传 用户的信息
+    var apk_data={
+        "scan_type":"null",
+        "file_name":"null",
+        "hash":"null",
+        "re_scan":"0"
+    }
+
+        function upload(){ //在这里进行ajax 文件上传 用户的信息
                     var $file1 = $("input[name='fileName1']").val();//用户文件内容(文件)
                     // 判断文件是否为空
                     if ($file1 == "") {
@@ -89,10 +75,39 @@
                     contentType : false,
                     success : function(data){
                         if (data.status=="success") {
-                            alert("文件上传成功");
+                            apk_data.scan_type=data.scan_type;
+                            apk_data.file_name=data.file_name;
+                            apk_data.hash=data.hash;
+                            $('#terminal').append('<p>文件上传成功，请开始扫描</p>');
+                            $('#terminal').append("文件名: "+data.file_name +"<br><br>");
+                            $('#terminal').append("hash: "+data.hash+"<br><br>");
+                            $('#terminal').append("文件类型: "+data.scan_type+"<br><br>");
                         }else{
                         alert("文件上传失败,请联系工作人员")
                     }}
                 });
                 }
+
+
+        function startScan(){ //在这里进行ajax  申请扫描
+            $('#terminal').append('<p>应用正在解包扫描中, 花费时间可能较长, 请耐心等待.....</p>');
+
+            $.ajax({
+                type : "post",
+                 headers: {
+                   "Authorization":"3cad2695b8403693647ca66f28f80e4fa679fd0df43aaee6c8f15bc1ce9df8e1"
+                  },
+                url : "http://127.0.0.1:9000/api/v1/scan",
+                data: "scan_type="+apk_data.scan_type+"&file_name="+apk_data.file_name+"&hash="+apk_data.hash,
+                dataType:"json",
+                success : function(data){
+                    if (data!=null) {
+                            $('#terminal').append('<p>解包扫描成功...</p>');
+                            $('#terminal').append("应用信息:<br>"+JSON.stringify(data, null, "\t"));
+
+                    }else{
+                    alert("扫描失败,请联系工作人员")
+                }}
+            });
+            }
     </script>
