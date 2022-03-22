@@ -3,7 +3,7 @@
        style="margin-bottom: 5%">
         <input type="text" ng-model="keyword" class="form-control" placeholder="Search...">
         <span class="input-group-btn">
-            <button class="btn btn-default" type="button" style="outline: none" ng-click="search()">
+            <button class="btn btn-default" type="button" style="outline: none" onclick="getApkInfo()" >
                 <i class="fa fa-search"></i>
             </button>
         </span>
@@ -12,9 +12,10 @@
           <thead>
               <tr>
                 <td>应用名称</td>
-                <td>版本号</td>
-                <td>MD5值</td>
-                <td>修改日期</td>
+                <td>包名</td>
+                <td>HASH值</td>
+                <td>安全得分</td>
+                  <td>文件大小</td>
                 <td></td>
               </tr>
             </thead>
@@ -45,3 +46,4 @@
         <button class="close" ng-click="display=false">&times;</button>
     </span>
 </div>
+

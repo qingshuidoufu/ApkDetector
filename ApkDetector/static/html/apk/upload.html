@@ -3,7 +3,8 @@
     <div ng-file-drop ng-model="files" class="drop-box col-sm-8 col-sm-offset-2"
          style="height: 250px; padding-top: 120px; margin-bottom: 30px"
          drag-over-class="dragover" ng-multiple="false" allow-dir="false"
-        accept=".apk">Drop APK File here</div>
+        accept=".apk">请提交安卓应用文件, 以.apk为后缀, 提交后请点击"开始扫描"按钮,
+        系统将会对apk文件进行解包分析, 该过程可能需要花费一定的时间, 请耐心等待 </div>
 
 
     <input  class="btn btn-success col-sm-2 col-sm-offset-1" ng-file-select
@@ -104,6 +105,28 @@
                     if (data!=null) {
                             $('#terminal').append('<p>解包扫描成功...</p>');
                             $('#terminal').append("应用信息:<br>"+JSON.stringify(data, null, "\t"));
+                            var apk_info=data;
+                            $.ajax({
+                                type: "post",
+                                url : "http://127.0.0.1:8000/apk/save_apk_info",
+                                data : {
+                                    "apk_name" : apk_info.app_name,
+                                    "package_name" : apk_info.package_name,
+                                    "hash_value" : apk_info.md5,
+                                    "security_score" : apk_info.security_score,
+                                    "size" : apk_info.size
+                                },
+                                dataType:"json",
+                                success : function (data) {
+                                    if(data.msg=="success"){
+                                        $('#terminal').append('<p>应用信息成功保存到数据库...</p>');
+                                    }
+                                    else {
+                                        alert("应用信息保存失败")
+                                    }
+
+                                }
+                            })
 
                     }else{
                     alert("扫描失败,请联系工作人员")
