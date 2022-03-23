@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-cn" ng-app="DroidWatcher">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>ApkDetector</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    	<link href="/static/lib/metisMenu/metisMenu.min.css" rel="stylesheet">
+    	<link href="/static/lib/sbadmin/css/sb-admin-2.css" rel="stylesheet">
+    	<link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    	<link href="/static/lib/jsonEditor/jsoneditor.min.css" rel="stylesheet">
+    	<link href="/static/css/main.css" rel="stylesheet">
+	</head>
+
+	<body ng-controller="rootCtrl">
+	    <div id="wrapper">
+	        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            {% include "headbar.html" %}
+            {% include "sidebar.html" %}
+            </nav>
+            <div id="page-wrapper">
+                <div class="container-fluid">
+                    <div class="row" style="margin-top: 5%" ng-show="!display">
+                        <div class="input-group custom-search-form col-sm-6 col-sm-offset-3"
+                           style="margin-bottom: 5%">
+                            <input type="text" ng-model="keyword" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" style="outline: none" onclick="getApkInfo()" >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <table class="col-sm-8 table  table-hover table-striped">
+                              <thead>
+                                  <tr>
+                                    <td>应用名称</td>
+                                    <td>包名</td>
+                                    <td>HASH值</td>
+                                    <td>安全得分</td>
+                                      <td>文件大小</td>
+                                    <td></td>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for apk_info in apk_infos %}
+                                    <tr id>
+
+                                        <td>{{ apk_info.apk_name }} </td>
+                                        <td>{{ apk_info.package_name }}</td>
+                                        <td >{{ apk_info.hash_value}}</td>
+                                        <td>{{apk_info.security_score}}</td>
+                                        <td>{{apk_info.size}}</td>
+                                        <td>
+                                            <button class="btn btn-info" style="outline: none" onclick="window.location.href='basic?hash={{ apk_info.hash_value }}'">更多信息</button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-warning" style="outline: none" onclick="deleteScan('{{  apk_info.hash_value }}')">删除扫描</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                         </table>
+                         <nav>
+                            <ul class="pager">
+                                {%  if apk_infos.has_previous %}
+                                    <li class="previous" ><a href="?page={{ apk_infos.previous_page_number }}"><span aria-hidden="true">&larr;</span>上一页</a></li>
+                                {% endif %}
+                                <span class="current">
+                                 Page {{ apk_infos.number }} of {{ apk_infos.paginator.num_pages }}</span>
+                                {% if apk_infos.has_next %}
+                                    <li class="next" ><a href="?page={{ apk_infos.next_page_number }}">下一页<span aria-hidden="true">&rarr;</span></a></li>
+                                {% endif %}
+                            </ul>
+                         </nav>
+                    </div>
+
+                    <div class="alert alert-info" ng-show="display"
+                             style="text-align: center; position: fixed; bottom: 5%; width: 60%; margin-left: 5%; margin-right: 10%">
+                        <span>
+                            {[ context ]}
+                            <button class="close" ng-click="display=false">&times;</button>
+                        </span>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+	    <script src="/static/lib/jquery.min.js"></script>
+		<script src="/static/lib/bootstrap/js/bootstrap.min.js"></script>
+	    <script src="/static/lib/metisMenu/metisMenu.min.js"></script>
+        <script src="/static/lib/jsonEditor/jsoneditor.min.js"></script>
+	    <script src="/static/lib/sbadmin/js/sb-admin-2.js"></script>
+		<script src="/static/lib/angular/angular.min.js"></script>
+		<script src="/static/lib/socketio/socket.io.js"></script>
+		<script src="/static/lib/fileUpload/angular-file-upload.min.js"></script>
+		<script src="/static/lib/angular/angular-ui-router.min.js"></script>
+		<script src="/static/js/controller.js"></script>
+		<script src="/static/js/app.js"></script>
+        <script>
+             function deleteScan(hash_value){ //在这里进行ajax  申请删除扫描
+
+                $.ajax({
+                    type : "post",
+                     headers: {
+                       "Authorization":"3cad2695b8403693647ca66f28f80e4fa679fd0df43aaee6c8f15bc1ce9df8e1"
+                      },
+                    url : "http://127.0.0.1:9000/api/v1/delete_scan",
+                    data: "hash="+hash_value,
+                    dataType:"json",
+                    success : function(data){
+                        alert('是否从服务器中删除扫描文件: '+data.deleted);
+                        $.ajax({
+                            type : "post",
+                            url : "http://127.0.0.1:8000/apk/delete_apk_info",
+                            data: "hash="+hash_value,
+                            dataType:"json",
+                            success : function(data){
+                                alert(data.msg);
+                                window.location.reload();
+                               }
+                        });
+                    }
+                });
+            }
+
+
+        </script>
+    </body>
+
+</html>
+
+
+
