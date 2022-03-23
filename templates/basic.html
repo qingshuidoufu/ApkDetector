@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-cn" ng-app="DroidWatcher">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>ApkDetector</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    	<link href="/static/lib/metisMenu/metisMenu.min.css" rel="stylesheet">
+    	<link href="/static/lib/sbadmin/css/sb-admin-2.css" rel="stylesheet">
+    	<link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    	<link href="/static/lib/jsonEditor/jsoneditor.min.css" rel="stylesheet">
+    	<link href="/static/css/main.css" rel="stylesheet">
+	</head>
+
+	<body ng-controller="rootCtrl">
+	    <div id="wrapper">
+	        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            {% include "headbar.html" %}
+            {% include "sidebar.html" %}
+            </nav>
+            <div id="page-wrapper">
+                <div class="container-fluid">
+                    <div class="row" ng-show="!display">
+                        <div class="well col-sm-6 col-sm-offset-3"
+                            style="text-align: center;border: solid 1px #dddddd;">
+                            <p>{{ context }}</p>
+                        </div>
+                    </div>
+
+                    <div  class="information">
+                    <div class="row">
+                        <h4 style="text-align: center">基本信息</h4>
+                        <table  frame=void border rules=none align="left"
+                                class=" apkInfo col-sm-10 col-sm-offset-2" style="text-align: left;">
+                            <tbody>
+                                <tr>
+                                    <td>应用名称：{{ apk_details.apk_name }}</td>
+                                    <td>应用版本：{{ apk_details.version }} </td>
+                                </tr>
+                                <tr>
+                                    <td>安卓版本代号：{{ apk_details.version_code }}</td>
+                                    <td>文件大小：{{ apk_details.size }}</td>
+                                </tr>
+                                <tr>
+                                    <td>MD5值：{{ apk_details.md5 }}</td>
+                                    <td>SHA265值：{{ apk_details.sha256  }}</td>
+                                </tr>
+                                <tr>
+                                    <td>最大SDK：{{ apk_details.max_sdk }}</td>
+                                    <td>最小SDK：{{ apk_details.min_sdk }}</td>
+                                </tr>
+                                <tr>
+                                    <td>安装包名称：{{ apk_details.package_name }}</td>
+                                    <td>主活动：{{ apk_details.main_activity }}/td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr color="#990099" class="col-sm-10 col-sm-offset-1">
+                    </div>
+
+
+                    <div class="row">
+                        <h4 style="text-align: center">分析报告摘要</h4>
+                        <table frame=void border rules=none align="left"
+                                class="apkInfo col-sm-10 col-sm-offset-2" style="text-align: left;">
+                            <tbody>
+                                <tr>
+                                    <td>应用类型：{{ apk_details.app_type }}</td>
+                                    <td>安全得分：{{ apk_details.security_score }}</td>
+                                </tr>
+                                <tr>
+                                    <td>cvss漏洞评分：{{ apk_details.average_cvss }}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>机器学习分类结果：{{ apk_details.machine_result }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div style="text-align: center">
+                        <a type="button" class="btn btn-lg btn-info" href="/#/report/analysis">
+                            查看详细分析报告>>
+                        </a>
+                        <hr>
+
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+	    <script src="/static/lib/jquery.min.js"></script>
+		<script src="/static/lib/bootstrap/js/bootstrap.min.js"></script>
+	    <script src="/static/lib/metisMenu/metisMenu.min.js"></script>
+        <script src="/static/lib/jsonEditor/jsoneditor.min.js"></script>
+	    <script src="/static/lib/sbadmin/js/sb-admin-2.js"></script>
+		<script src="/static/lib/angular/angular.min.js"></script>
+		<script src="/static/lib/socketio/socket.io.js"></script>
+		<script src="/static/lib/fileUpload/angular-file-upload.min.js"></script>
+		<script src="/static/lib/angular/angular-ui-router.min.js"></script>
+		<script src="/static/js/controller.js"></script>
+		<script src="/static/js/app.js"></script>
+    </body>
+
+</html>
+
+

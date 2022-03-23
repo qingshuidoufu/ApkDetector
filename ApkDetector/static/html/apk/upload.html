@@ -4,7 +4,7 @@
          style="height: 250px; padding-top: 120px; margin-bottom: 30px"
          drag-over-class="dragover" ng-multiple="false" allow-dir="false"
         accept=".apk">请提交安卓应用文件, 以.apk为后缀, 提交后请点击"开始扫描"按钮,
-        系统将会对apk文件进行解包分析, 该过程可能需要花费一定的时间, 请耐心等待, 切勿点击其他页面</div>
+        系统将会对apk文件进行解包分析, 该过程可能需要花费一定的时间, 请耐心等待, 切勿离开此页面, 直到控制台提示: "应用信息成功保存到数据库..." 或 "保存到数据库失败"</div>
 
 
     <input  class="btn btn-success col-sm-2 col-sm-offset-1" ng-file-select
@@ -114,7 +114,16 @@
                                     "package_name" : apk_info.package_name,
                                     "hash_value" : apk_info.md5,
                                     "security_score" : apk_info.security_score,
-                                    "size" : apk_info.size
+                                    "size" : apk_info.size,
+                                    "version" : apk_info.version,
+                                    "version_code" : apk_info.version_code,
+                                    "md5" : apk_info.md5,
+                                    "sha256" : apk_info.sha256,
+                                    "max_sdk" : apk_info.max_sdk,
+                                    "min_sdk" : apk_info.min_sdk,
+                                    "main_activity" : apk_info.main_activity,
+                                    "app_type" : apk_info.app_type,
+                                    "average_cvss" : apk_info.average_cvss
                                 },
                                 dataType:"json",
                                 success : function (data) {
