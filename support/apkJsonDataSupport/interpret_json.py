@@ -54,7 +54,7 @@ def save2dataframe(pydata, dataframe):
 def get_csv(json_file):
 
     basedir=os.path.dirname(__file__)
-    template_json_dir=os.path.join(basedir,'sampleTemplate/apkJson.json')
+    template_json_dir=os.path.join(basedir, '../sampleTemplate/apkJson.json')
     # 样本模板文件
     with open(template_json_dir, 'r') as f:
         dict_raw=json.load(f)
@@ -79,5 +79,5 @@ def get_csv(json_file):
     print(my_dataframe)
 
     # 转换数据框成csv数据
-    my_dataframe.to_csv(os.path.join(basedir,'./sampleCsv/csvReport.csv') )
+    my_dataframe.to_csv(os.path.join(basedir, '../sampleCsv/csvReport.csv'))
 

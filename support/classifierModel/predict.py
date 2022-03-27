@@ -1,13 +1,11 @@
 import os
 
-from sklearn.decomposition import PCA
-from sklearn.model_selection import train_test_split
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from joblib import load
 
 # 数据预处理
-from support.interpret_json import get_csv
+from support.apkJsonDataSupport.interpret_json import get_csv
 
 
 def pre_process(static_path):
@@ -46,11 +44,11 @@ def mechine_analyse(json_data):
     get_csv(json_data)
 
     basedir = os.path.dirname(__file__)
-    csv_path = os.path.join(basedir, 'sampleCsv/csvReport.csv')
-    knn_model_path = os.path.join(basedir, 'classifierModel/knn.joblib')
-    native_bayes_model_path = os.path.join(basedir, 'classifierModel/bayes.joblib')
-    decision_tree_model_path = os.path.join(basedir, 'classifierModel/dc.joblib')
-    random_forest_model_path = os.path.join(basedir, 'classifierModel/rf.joblib')
+    csv_path = os.path.join(basedir, '../sampleCsv/csvReport.csv')
+    knn_model_path = os.path.join(basedir, 'knn.joblib')
+    native_bayes_model_path = os.path.join(basedir, 'bayes.joblib')
+    decision_tree_model_path = os.path.join(basedir, 'dc.joblib')
+    random_forest_model_path = os.path.join(basedir, 'rf.joblib')
 
     # 数据预处理
     sample_data = pre_process(csv_path)

@@ -5,12 +5,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, InvalidPage, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.template.loader import render_to_string
 
 from apk.models import ApkInfo, ApkDetails, ApkJson, ApkLearnResult
 
 # 添加apk信息(info为基础信息, details为详细信息
-from support.predict import mechine_analyse
+from support.httpSupport.getConnetedStatus import is_MOBSF_connected, is_database_connected
+from support.classifierModel.predict import mechine_analyse
 
 
 @login_required
@@ -180,3 +180,10 @@ def apk_pdf(request):
         print("请求失败！", str(e))
 
     return response
+
+# 系统状态页面
+def system_status(request):
+    mob_sf_status=is_MOBSF_connected()
+    database_status=is_database_connected()
+    return render(request,'system_status.html',{'mob_sf_status':mob_sf_status,'database_status': database_status})
+

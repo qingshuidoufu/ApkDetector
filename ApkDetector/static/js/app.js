@@ -46,7 +46,7 @@ angular.module('DroidWatcher',['ui.router','Controllers'])
             })
             .state('setting',{
             	url:'/system/setting',
-            	templateUrl:'/static/html/system/setting.html',
+            	templateUrl:'/static/html/system/system_status.html',
             	controller:'setCtrl'
             });
         $interpolateProvider.startSymbol('{[');

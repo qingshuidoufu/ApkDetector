@@ -1,7 +1,5 @@
 import os
 
-from django.test import TestCase
-
 # Create your tests here.
 import django
 
@@ -10,8 +8,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ApkDetector.settings")
 django.setup()
 from apk.models import ApkJson
-from support.interpret_json import get_csv
-from support.predict import mechine_analyse
+from support.classifierModel.predict import mechine_analyse
 
 if __name__ == "__main__":
 

@@ -1,5 +1,6 @@
 
-
+{% load widget_tweaks %}
+{% load simpletags %}
 
 
 <!DOCTYPE html>
@@ -28,16 +29,41 @@
                 <div class="container-fluid">
                     {% block content %}
                     {% if user.is_authenticated %}
-                    <a href="{% url 'profile_update' %}">更新个人资料</a> | <a href="{% url 'account_email' %}">管理邮件地址</a>  | <a href="{% url 'account_change_password' %}">修改密码</a> |
-                    <a href="{% url 'account_logout' %}">退出</a>
+                    	<div role="tabpanel" style="margin-top: 3%">
+                            <ul class="nav nav-tabs " role="tablist">
+                                <li role="presentation" class="col-sm-offset-4"><a
+                                    href="{% url 'profile_update' %}"   >
+                                        更新个人资料 </a></li>
+                                <li role="presentation"><a href="{% url 'account_email' %}"
+                                    > 管理邮件地址 </a></li>
+                                <li role="presentation"><a href="{% url 'account_change_password' %}"
+                                    > 修改密码 </a></li>
+                                <li role="presentation"><a href="{% url 'account_logout' %}"
+                                    > 退出 </a></li>
+
+
+                            </ul>
                     {% endif %}
+                     <div class="row" ng-show="!display">
+                        <div class="well col-sm-6 col-sm-offset-3"
+                            style="text-align: center;border: solid 1px #dddddd;">
+                    <p>欢迎来到ApkDetector: 恶意安卓应用检测系统
+                        <br>
+                        <br>
+                        欢迎: {{ user.username }}.
+                        {% if not user.profile.account_verified %}
+                        (Unverified email.)
+                        {% endif %}
+                    </p>
+                        </div>
+                    </div>
                     <h2></h2>
 
                     <div class="form-wrapper">
-                       <form method="post" action="../do_update/" enctype="multipart/form-data">
+                       <form method="post" action="../do_update" enctype="multipart/form-data">
                           {% csrf_token %}
                           {% for field in form %}
-                               <div class="fieldWrapper">
+                               <div style="text-align: center" class="form-control-static">
                             {{ field.errors }}
                             {{ field.label_tag }} {{ field }}
                             {% if field.help_text %}
@@ -45,9 +71,9 @@
                             {% endif %}
                                </div>
                             {% endfor %}
-                          <div class="button-wrapper submit">
-                             <input type="submit" value="更新" />
-                          </div>
+
+                           <button  type="submit" class="btn btn-default btn-lg col-sm-4 col-sm-offset-4"
+                                 style="margin-top: 3%" >更新</button>
                        </form>
                     </div>
                     {% endblock %}
@@ -70,6 +96,7 @@
 		<script src="/static/lib/angular/angular-ui-router.min.js"></script>
 		<script src="/static/js/controller.js"></script>
 		<script src="/static/js/app.js"></script>
+        </div>
     </body>
 
 </html>

@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'simpleui',
+    'widget_tweaks',
     'ApkDetector',
     'SiteAccounts.apps.SiteaccountsConfig',
     'django.contrib.sites',
@@ -136,12 +138,12 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = '/accounts/login'
 
 # 基本设定
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
-LOGIN_REDIRECT_URL = '/accounts/profile/'
+LOGIN_REDIRECT_URL = '/accounts/profile'
 
 
 AUTHENTICATION_BACKENDS = (

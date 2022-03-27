@@ -77,7 +77,7 @@ def my_logout(request):
     :return: 退出并重定向到登录页面
     """
     logout(request)
-    return redirect("/accounts/login/")
+    return redirect("/accounts/login")
 
 @login_required()
 def change_password(request):

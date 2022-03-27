@@ -53,7 +53,7 @@
                                 </tr>
                                 <tr>
                                     <td>安装包名称：{{ apk_details.package_name }}</td>
-                                    <td>主活动：{{ apk_details.main_activity }}/td>
+                                    <td>主活动：{{ apk_details.main_activity }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -62,11 +62,11 @@
 
 
                     <div class="row">
-                        <h4 style="text-align: center">分析报告摘要</h4>
+                           <tr><h4 style="text-align: center">分析报告摘要</h4>
                         <table frame=void border rules=none align="left"
                                 class="apkInfo col-sm-10 col-sm-offset-2" style="text-align: left;">
                             <tbody>
-                                <tr>
+
                                     <td>应用类型：{{ apk_details.app_type }}</td>
                                     <td>安全得分(满分100分)：{{ apk_details.security_score }}</td>
                                 </tr>

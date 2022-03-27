@@ -31,10 +31,38 @@
 
                     {% block content %}
                      {% if user.is_authenticated %}
-                    <a href="{% url 'profile_update' %}">更新个人资料</a> | <a href="{% url 'account_email' %}">管理邮件地址</a>  | <a href="{% url 'account_change_password' %}">修改密码</a> |
-                    <a href="{% url 'account_logout' %}">退出</a>
+                    	<div role="tabpanel" style="margin-top: 3%">
+                            <ul class="nav nav-tabs " role="tablist">
+                                <li role="presentation" class="col-sm-offset-4"><a
+                                    href="{% url 'profile_update' %}"   >
+                                        更新个人资料 </a></li>
+                                <li role="presentation"><a href="{% url 'account_email' %}"
+                                    > 管理邮件地址 </a></li>
+                                <li role="presentation"><a href="{% url 'account_change_password' %}"
+                                    > 修改密码 </a></li>
+                                <li role="presentation"><a href="{% url 'account_logout' %}"
+                                    > 退出 </a></li>
+
+
+                            </ul>
                     {% endif %}
-                        <h1>{% trans "E-mail Addresses" %}</h1>
+                        <div class="row" ng-show="!display">
+                        <div class="well col-sm-6 col-sm-offset-3"
+                            style="text-align: center;border: solid 1px #dddddd;">
+                    <p>欢迎来到ApkDetector: 恶意安卓应用检测系统
+                        <br>
+                        <br>
+                        欢迎: {{ user.username }}.
+                        {% if not user.profile.account_verified %}
+                        (Unverified email.)
+                        {% endif %}
+                    </p>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center">
+
+                          <h1>{% trans "E-mail Addresses" %}</h1>
                     {% if user.emailaddress_set.all %}
                     <p>{% trans 'The following e-mail addresses are associated with your account:' %}</p>
 
@@ -105,6 +133,10 @@
             </div>
 
         </div>
+
+
+                    </div>
+
 
 
 
