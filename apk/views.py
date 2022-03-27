@@ -5,10 +5,12 @@ from django.core.paginator import Paginator, PageNotAnInteger, InvalidPage, Empt
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from apk.models import ApkInfo, ApkDetails
-
+from apk.models import ApkInfo, ApkDetails, ApkJson, ApkLearnResult
 
 # 添加apk信息(info为基础信息, details为详细信息
+from support.predict import mechine_analyse
+
+
 @login_required
 def save_apk_info(request):
     if request.method == "POST":  # 判断Post请求提交表单
@@ -38,10 +40,30 @@ def save_apk_info(request):
         apk_details.security_score = request.POST.get("security_score")
         apk_details.average_cvss = request.POST.get("average_cvss")
         apk_details.user_name = request.user.username
-
-        # todo 运行机器学习代码,获取机器学习分类结果
-
         apk_details.save()
+
+        #  保存json数据
+        apk_json = ApkJson()
+        apk_json.hash_value = request.POST.get("md5")
+        apk_json.user_name = request.user.username
+        apk_json.data = request.POST.get("apk_json")
+        apk_json.save()
+
+        #  运行机器学习代码,获取机器学习分类结果
+
+        # 新建一个model
+        apk_learn_result = ApkLearnResult()
+        # 获取分类结果
+        result = mechine_analyse(apk_json.data)
+
+        apk_learn_result.hash_value = request.POST.get("md5")
+        apk_learn_result.user_name = request.user.username
+
+        apk_learn_result.knn_result= result.get('knn')
+        apk_learn_result.native_bayes_result = result.get('nb')
+        apk_learn_result.decision_tree_result = result.get('dc')
+        apk_learn_result.random_forest_result = result.get('rf')
+        apk_learn_result.save()
 
         return HttpResponse(json.dumps({'msg': 'success'}), content_type='application/json')
 
@@ -75,21 +97,65 @@ def delete_apk_info(request):
     apk_info.delete()
 
     #  连带删除apk_details信息
-    apk_details=ApkDetails.objects.get(md5=request.POST.get("hash"))
+    apk_details = ApkDetails.objects.get(md5=request.POST.get("hash"))
     apk_details.delete()
+
+    #  连带删除apk_json数据
+    apk_json = ApkJson.objects.get(hash_value=request.POST.get("hash"))
+    apk_json.delete()
+
+    # 连带删除机器学习分类结果
+    apk_learn_result = ApkLearnResult.objects.get(hash_value=request.POST.get("hash"))
+    apk_learn_result.delete()
 
     return HttpResponse(json.dumps({'msg': '本地数据库删除成功'}), content_type='application/json')
 
 
 # 查看详情
-
+@login_required()
 def get_apk_details(request):
     hash_value = request.GET.get("hash")
     if hash_value is None:
-        return render(request, "basic.html",{'context':'未指定apk文件, 请使用查询功能选择一个应用查看'})
+        return render(request, "basic.html", {'context': '未指定apk文件, 请使用查询功能选择一个应用后查看'})
     else:
         try:
             apk_details = ApkDetails.objects.get(md5=hash_value)
+            apk_learn_result = ApkLearnResult.objects.get(hash_value=hash_value)
+            class_string_dict={}
+            if apk_learn_result.knn_result.__eq__('1'):
+                class_string_dict['knn']='恶意应用'
+            else:
+                class_string_dict['knn']='正常应用'
+            if apk_learn_result.native_bayes_result.__eq__('1'):
+                class_string_dict['nb']='恶意应用'
+            else:
+                class_string_dict['nb']='正常应用'
+            if apk_learn_result.decision_tree_result.__eq__('1'):
+                class_string_dict['dc'] = '恶意应用'
+            else:
+                class_string_dict['dc'] = '正常应用'
+            if apk_learn_result.random_forest_result.__eq__('1'):
+                class_string_dict['rf'] = '恶意应用'
+            else:
+                class_string_dict['rf'] = '正常应用'
         except:
             return render(request, "basic.html")
-        return render(request, "basic.html", {'apk_details': apk_details,'context':'此为应用的基本信息和基本分析情况, 请点击查看详细分析报告查看详细信息'})
+        return render(request, "basic.html",
+                      {'apk_details': apk_details, 'class_string_dict' : class_string_dict,'context': '此为应用的基本信息和基本分析情况, 请点击查看详细分析报告查看详细信息'})
+
+
+# 分析结果展示
+@login_required()
+def analysis(request):
+    hash_value = request.GET.get("hash")
+    if hash_value is None:
+        return render(request, "analysis.html", {'context': '未指定apk文件, 请使用查询功能选择一个应用后查看'})
+    else:
+        try:
+            apk_json = ApkJson.objects.get(hash_value=hash_value)
+
+        except:
+            return render(request, "analysis.html")
+    return render(request, "analysis.html",
+                  {'apk_json': apk_json.data,  'hash': hash_value,
+                   'context': '分析结果以json数据展示'})

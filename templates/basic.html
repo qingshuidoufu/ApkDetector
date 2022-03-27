@@ -68,14 +68,19 @@
                             <tbody>
                                 <tr>
                                     <td>应用类型：{{ apk_details.app_type }}</td>
-                                    <td>安全得分：{{ apk_details.security_score }}</td>
+                                    <td>安全得分(满分100分)：{{ apk_details.security_score }}</td>
                                 </tr>
                                 <tr>
-                                    <td>cvss漏洞评分：{{ apk_details.average_cvss }}</td>
+                                    <td>cvss漏洞评分(满分10分)：{{ apk_details.average_cvss }}</td>
                                 </tr>
 
                                 <tr>
-                                    <td>机器学习分类结果：{{ apk_details.machine_result }}</td>
+                                    <td>K-近邻算法分类结果：{{ class_string_dict.knn}}</td>
+                                    <td>朴素贝叶斯算法分类结果：{{ class_string_dict.nb}}</td>
+                                </tr>
+                                <tr>
+                                    <td>决策树算法分类结果：{{ class_string_dict.dc}}</td>
+                                    <td>随机森林算法分类结果：{{ class_string_dict.rf}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -83,7 +88,7 @@
                     </div>
 
                     <div style="text-align: center">
-                        <a type="button" class="btn btn-lg btn-info" href="/#/report/analysis">
+                        <a id="json-report" type="button" class="btn btn-lg btn-info" href="/apk/analysis?hash={{ apk_details.md5 }}">
                             查看详细分析报告>>
                         </a>
                         <hr>
@@ -111,6 +116,7 @@
 		<script src="/static/js/controller.js"></script>
 		<script src="/static/js/app.js"></script>
     </body>
+
 
 </html>
 

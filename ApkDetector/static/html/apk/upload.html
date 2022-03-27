@@ -110,6 +110,7 @@
                                 type: "post",
                                 url : "http://127.0.0.1:8000/apk/save_apk_info",
                                 data : {
+                                    "apk_json" : JSON.stringify(apk_info),
                                     "apk_name" : apk_info.app_name,
                                     "package_name" : apk_info.package_name,
                                     "hash_value" : apk_info.md5,
