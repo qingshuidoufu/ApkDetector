@@ -1,9 +1,11 @@
 import json
 
+import requests
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, InvalidPage, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 
 from apk.models import ApkInfo, ApkDetails, ApkJson, ApkLearnResult
 
@@ -159,3 +161,22 @@ def analysis(request):
     return render(request, "analysis.html",
                   {'apk_json': apk_json.data,  'hash': hash_value,
                    'context': '分析结果以json数据展示'})
+
+# 向外部应用发送post请求获取pdf文件返回django前端展示
+def apk_pdf(request):
+    hash_value = request.GET.get("hash")
+    try:
+        # 请求头
+        url = 'http://127.0.0.1:9000/api/v1/download_pdf'
+        # 请求头
+        headers = {"Authorization" : "3cad2695b8403693647ca66f28f80e4fa679fd0df43aaee6c8f15bc1ce9df8e1"}
+        para = {"hash": hash_value}
+        r=requests.post(url,data=para,headers=headers)
+
+        response = HttpResponse(content_type="application/pdf",content=r.content)
+        response["Content-Disposition"] = \
+            f"inline; filename={hash_value}.pdf"
+    except BaseException as e:
+        print("请求失败！", str(e))
+
+    return response
