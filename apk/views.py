@@ -91,6 +91,30 @@ def search(request):
             apk_infos = paginator.page(paginator.num_pages)
         return render(request, "search.html", {'apk_infos': apk_infos})
 
+# 关键字查询
+@login_required()
+def search_by_query(request):
+    keyword=request.GET.get('keyword')
+    if not keyword:
+        return search(request)
+    apk_info_list = ApkInfo.objects.all().filter(user_name=request.user.username,apk_name__icontains=keyword).order_by('-id')
+
+    # 将数据按照规定每页显示 10 条, 进行分割
+    paginator = Paginator(apk_info_list, 10)
+    if request.method == "GET":
+        page = request.GET.get('page')
+        try:
+            apk_infos = paginator.page(page)
+        except PageNotAnInteger:
+            # 如果请求的页数不是整数, 返回第一页。
+            apk_infos = paginator.page(1)
+        except InvalidPage:
+            # 如果请求的页数不存在, 重定向页面
+            return HttpResponse('找不到页面的内容')
+        except EmptyPage:
+            # 如果请求的页数不在合法的页数范围内，返回结果的最后一页。
+            apk_infos = paginator.page(paginator.num_pages)
+        return render(request, "search.html", {'apk_infos': apk_infos})
 
 # 删除info信息
 @login_required()

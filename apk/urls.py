@@ -9,6 +9,7 @@ urlpatterns = [
     path('basic',views.get_apk_details),
     path("analysis",views.analysis),
     path('apk_pdf',views.apk_pdf),
-    path('system_status',views.system_status)
+    path('system_status',views.system_status),
+    path('search_by_query',views.search_by_query)
     ,
 ]
