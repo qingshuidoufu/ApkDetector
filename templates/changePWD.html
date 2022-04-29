@@ -122,10 +122,10 @@
                      $.ajaxSetup({
                          data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
                      });
-                     $.post("../do_change_password/", {  oldPassword: oldPassword, newPassword: newPassword },
+                     $.post("./do_change_password", {  oldPassword: oldPassword, newPassword: newPassword },
                          function(data){
                               alert(data.msg);
-                              location.href='../login';
+                              location.href='./login';
                      });
     			}else{
     				if(!flagName){

@@ -54,7 +54,7 @@
                     <div class="form-group">
                       <button id="regbtn" type="button" name="registerSubmit" class="btn btn-primary">注册</button>
                     </div>
-                  <small>已有账号?</small><a href="../login" class="signup">&nbsp;登录</a>
+                  <small>已有账号?</small><a href="./login" class="signup">&nbsp;登录</a>
                 </div>
               </div>
             </div>
@@ -122,10 +122,10 @@
                      $.ajaxSetup({
                          data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
                      });
-                     $.post("do_regist/", {  name: name, passWord: passWord },
+                     $.post("do_regist", {  name: name, passWord: passWord },
                          function(data){
                               alert(data.msg);
-                              location.href='../login';
+                              location.href='./login';
                      });
     			}else{
     				if(!flagName){
